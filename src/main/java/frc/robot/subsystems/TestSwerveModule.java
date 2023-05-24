@@ -26,8 +26,8 @@ public class TestSwerveModule extends SubsystemBase {
     turnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     moveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     //sets max current
-    turnMotor.setSmartCurrentLimit(25);
-    moveMotor.setSmartCurrentLimit(30);
+    turnMotor.setSmartCurrentLimit(15);
+    moveMotor.setSmartCurrentLimit(25);
     //limits acceleration
     turnMotor.setOpenLoopRampRate(0.4);
     moveMotor.setOpenLoopRampRate(0.4);
@@ -36,7 +36,7 @@ public class TestSwerveModule extends SubsystemBase {
   public void setTurnMotor(double speed) {
     turnMotor.set(speed);
   }
-
+  
   public void setMoveMotor(double speed) {
     moveMotor.set(speed);
   }
