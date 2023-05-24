@@ -4,20 +4,20 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.TestSwerve;
+import frc.robot.subsystems.TestSwerveModule;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class ExampleCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final TestSwerve testSwerve;
+  private final TestSwerveModule testSwerve;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(TestSwerve testSwerve) {
+  public ExampleCommand(TestSwerveModule testSwerve) {
     this.testSwerve = testSwerve;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(testSwerve);
@@ -41,4 +41,4 @@ public class ExampleCommand extends CommandBase {
     return false;
   }
 }
-  
+}
