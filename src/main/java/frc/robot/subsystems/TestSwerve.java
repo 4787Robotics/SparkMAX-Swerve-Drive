@@ -33,6 +33,10 @@ public class TestSwerve extends SubsystemBase {
         }
     }
 
+    public void testMoveTurnPID(double setPoint) {
+        swerveModules[0].setTurnPID(setPoint);
+    }
+
     public void stopAllSwerveModules() {
         for (int i = 0; i < totalSwerveModules; i++) {
             swerveModules[i].setTurnMotor(0);

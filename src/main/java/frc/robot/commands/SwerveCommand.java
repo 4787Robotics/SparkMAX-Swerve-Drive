@@ -30,7 +30,8 @@ public class SwerveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    testSwerve.moveAllSwerveModules(0, 0);
+    //testSwerve.moveAllSwerveModules(0, 0);
+    //testSwerve.testMoveTurnPID(1); // hopefully in degrees
     testSwerve.updateDashboard();
   }
 

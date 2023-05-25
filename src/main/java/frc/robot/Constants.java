@@ -27,9 +27,17 @@ public final class Constants {
     public static final int MOVE_MOTOR_GEAR_RATIO = 1; // UNKNOWN
 
     //Swerve PID constants
-    public static final double TURN_P = 0.0;
-    public static final double TURN_I = 0.0;
+    public static final double TURN_P = 0.02;
+    public static final double TURN_I = 0.001;
     public static final double TURN_D = 0.0;
+    public static final double TURN_IZ = 0;
+    public static final double TURN_FF = 0.00156;
+
+    public static final double TURN_MAX_OUTPUT = 1.0;
+    public static final double TURN_MIN_OUTPUT = -1.0;
+
+    public static final double TURN_MAX_VELVELOCITY = 2000;
+    public static final double TURN_MA0_XACCELERATION= 1500;
 
     public static final double KS_TURN_VOLTS = 0.0;
     public static final double KV_TURN_VOLT_SECONDS_PER_ROTATION = 0.0;
@@ -37,5 +45,8 @@ public final class Constants {
     public static final double K_TURN_ENCODER_COUNTS_PER_ROTATION = 8192.0;
     public static final double K_TURN_ENCODER_ROTATIONS_PER_PULSE =
         1 / K_TURN_ENCODER_COUNTS_PER_ROTATION;
-    public static final double K_TURN_MAX_RPS = 5600;
+    public static final double K_TURN_MAX_RPM = 5600;
+
+    public static final double K_TURN_TOLERANCE = 30;
+    public static final double K_TURN_TOLERANCE_PER_SECOND = 10.0;
 }

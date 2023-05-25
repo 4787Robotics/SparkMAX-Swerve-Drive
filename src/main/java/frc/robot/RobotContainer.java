@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.SwerveCommand;
+import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.TestSwerve;
 import frc.robot.subsystems.TestSwerveModule;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,9 +20,12 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final TestSwerve testSwerve = new TestSwerve();
+  //private final TestSwerve testSwerve = new TestSwerve();
 
-  private final SwerveCommand m_autoCommand = new SwerveCommand(testSwerve);
+  //private final SwerveCommand m_autoCommand = new SwerveCommand(testSwerve);
+  //test swerve turn
+  private final TestSwerveModule testSwerveModule = new TestSwerveModule(1, 2);
+  private final TurnToAngle turnToAngle = new TurnToAngle(30, testSwerveModule);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -44,6 +48,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return turnToAngle;
   }
 }

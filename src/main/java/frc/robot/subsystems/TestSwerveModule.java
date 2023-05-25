@@ -4,17 +4,21 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.ADIS16448_IMU.CalibrationTime;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxPIDController;
 
 
 public class TestSwerveModule extends SubsystemBase {
-  private CANSparkMax turnMotor;
-  private CANSparkMax moveMotor;
+  private CANSparkMax turnMotor, moveMotor;
+  private SparkMaxPIDController turnPIDController;
+  private double setPoint, provessVariable;
 
   private SparkMaxAbsoluteEncoder turnEncoder;
   /** Creates a new ExampleSubsystem. */
@@ -35,7 +39,21 @@ public class TestSwerveModule extends SubsystemBase {
     moveMotor.setOpenLoopRampRate(1);
 
     turnEncoder = turnMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+
+    turnPIDController = turnMotor.getPIDController();
+
+    turnPIDController.setP(TURN_P);
+    turnPIDController.setI(TURN_I);
+    turnPIDController.setD(TURN_D);
+    turnPIDController.setIZone(TURN_IZ);
+    turnPIDController.setFF(TURN_FF);
+    turnPIDController.setOutputRange(TURN_MIN_OUTPUT, TURN_MAX_OUTPUT);
   } 
+
+  public void setTurnPID(double setPoint) {
+    turnPIDController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+    provessVariable = turnEncoder.getVelocity();
+  }
 
   public void setTurnMotor(double speed) {
     turnMotor.set(speed);
