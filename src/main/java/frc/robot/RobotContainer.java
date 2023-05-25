@@ -6,8 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SwerveCommand;
 import frc.robot.subsystems.TestSwerve;
+import frc.robot.subsystems.TestSwerveModule;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -18,9 +19,9 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final TestSwerve m_exampleSubsystem = new TestSwerve();
+  private final TestSwerve testSwerve = new TestSwerve();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final SwerveCommand m_autoCommand = new SwerveCommand(testSwerve);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

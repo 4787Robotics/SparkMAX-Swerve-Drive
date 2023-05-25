@@ -5,16 +5,18 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import static frc.robot.Constants.*;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 
 public class TestSwerveModule extends SubsystemBase {
   private CANSparkMax turnMotor;
   private CANSparkMax moveMotor;
+
+  private SparkMaxAbsoluteEncoder turnEncoder;
   /** Creates a new ExampleSubsystem. */
   public TestSwerveModule(int TURN_MOTOR_ID, int MOVE_MOTOR_ID) {
     turnMotor = new CANSparkMax(TURN_MOTOR_ID, MotorType.kBrushless);
@@ -29,9 +31,11 @@ public class TestSwerveModule extends SubsystemBase {
     turnMotor.setSmartCurrentLimit(15);
     moveMotor.setSmartCurrentLimit(25);
     //limits acceleration
-    turnMotor.setOpenLoopRampRate(0.4);
-    moveMotor.setOpenLoopRampRate(0.4);
-  }
+    turnMotor.setOpenLoopRampRate(1);
+    moveMotor.setOpenLoopRampRate(1);
+
+    turnEncoder = turnMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+  } 
 
   public void setTurnMotor(double speed) {
     turnMotor.set(speed);
@@ -39,5 +43,17 @@ public class TestSwerveModule extends SubsystemBase {
   
   public void setMoveMotor(double speed) {
     moveMotor.set(speed);
+  }
+
+  public void resetMoveEncoder() {
+    moveMotor.getEncoder().setPosition(0);
+  }
+
+  public double getTurnEncoder() {
+    return turnEncoder.getPosition();
+  }
+
+  public double getMoveEncoder() {
+    return moveMotor.getEncoder().getPosition();
   }
 }

@@ -13,9 +13,29 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int TEST_TURN_MOTOR_ID = 0;
+    public static final boolean USE_CONTROLLER = true; //set to false to use set turning speeds
+    public static final boolean USE_PID = false; //set to true to use PID
+
+    //set turn speeds
+    public static final double TEST_TURN_SPEED = 0.2;
+    public static final double TEST_MOVE_SPEED = 0.2;
+
+    public static final int TEST_TURN_MOTOR_ID = 2;
     public static final int TEST_MOVE_MOTOR_ID = 1;
 
     public static final int TURN_MOTOR_GEAR_RATIO = 1; // UNKNOWN
     public static final int MOVE_MOTOR_GEAR_RATIO = 1; // UNKNOWN
+
+    //Swerve PID constants
+    public static final double TURN_P = 0.0;
+    public static final double TURN_I = 0.0;
+    public static final double TURN_D = 0.0;
+
+    public static final double KS_TURN_VOLTS = 0.0;
+    public static final double KV_TURN_VOLT_SECONDS_PER_ROTATION = 0.0;
+
+    public static final double K_TURN_ENCODER_COUNTS_PER_ROTATION = 8192.0;
+    public static final double K_TURN_ENCODER_ROTATIONS_PER_PULSE =
+        1 / K_TURN_ENCODER_COUNTS_PER_ROTATION;
+    public static final double K_TURN_MAX_RPS = 5600;
 }
