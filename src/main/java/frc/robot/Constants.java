@@ -26,6 +26,8 @@ public final class Constants {
     public static final int TURN_MOTOR_GEAR_RATIO = 1; // UNKNOWN
     public static final int MOVE_MOTOR_GEAR_RATIO = 1; // UNKNOWN
 
+    public static final int MOVE_WHEEL_CIRCUMFERENCE = 1; // UNKNOWN
+
     //Swerve PID constants
     public static final double TURN_P = 0.02;
     public static final double TURN_I = 0.001;
@@ -49,4 +51,7 @@ public final class Constants {
 
     public static final double K_TURN_TOLERANCE = 30;
     public static final double K_TURN_TOLERANCE_PER_SECOND = 10.0;
+
+    public static final double ROBOT_LENGTH = 1; // UNKNOWN
+    public static final double ROBOT_WIDTH = 1; // UNKNOWN
 }

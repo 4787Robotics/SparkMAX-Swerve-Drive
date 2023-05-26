@@ -21,8 +21,17 @@ public class TestSwerveModule extends SubsystemBase {
   private double setPoint, provessVariable;
 
   private SparkMaxAbsoluteEncoder turnEncoder;
+
+  private double currentModuleVelocity; //meters per second
+  private double currentModuleAngle; //in radians
+
+  private double WHEEL_X;
+  private double WHEEL_Y;
   /** Creates a new ExampleSubsystem. */
-  public TestSwerveModule(int TURN_MOTOR_ID, int MOVE_MOTOR_ID) {
+  public TestSwerveModule(int TURN_MOTOR_ID, int MOVE_MOTOR_ID, double WHEEL_X, double WHEEL_Y) {
+    this.WHEEL_X = WHEEL_X;
+    this.WHEEL_Y = WHEEL_Y;
+
     turnMotor = new CANSparkMax(TURN_MOTOR_ID, MotorType.kBrushless);
     moveMotor = new CANSparkMax(MOVE_MOTOR_ID, MotorType.kBrushless);
     //change as needed
@@ -50,6 +59,14 @@ public class TestSwerveModule extends SubsystemBase {
     turnPIDController.setOutputRange(TURN_MIN_OUTPUT, TURN_MAX_OUTPUT);
   } 
 
+  public double getWheelX() {
+    return WHEEL_X;
+  }
+
+  public double getWheelY() {
+    return WHEEL_Y;
+  }
+
   public void setTurnPID(double setPoint) {
     turnPIDController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     provessVariable = turnEncoder.getVelocity();
@@ -73,5 +90,17 @@ public class TestSwerveModule extends SubsystemBase {
 
   public double getMoveEncoder() {
     return moveMotor.getEncoder().getPosition();
+  }
+
+  public double getTurnCurrentVelocityRotationsPerSecond() {
+    return turnEncoder.getVelocity();
+  }
+
+  public double getCurrentMoveVelocityRotationsPerSecond() {
+    return moveMotor.getEncoder().getVelocity();
+  }
+
+  public double getCurrentMoveVelocityInchesPerSecond() {
+    return getCurrentMoveVelocityRotationsPerSecond() * MOVE_WHEEL_CIRCUMFERENCE / MOVE_MOTOR_GEAR_RATIO;
   }
 }
