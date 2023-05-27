@@ -11,7 +11,7 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TestSwerve extends SubsystemBase {
-    final int totalSwerveModules = 1;
+    final int totalSwerveModules = 4;
     private TestSwerveModule[] swerveModules = new TestSwerveModule[totalSwerveModules];
 
     private boolean fieldCentric = false;
@@ -21,7 +21,7 @@ public class TestSwerve extends SubsystemBase {
     private double robotMoveX = 0; //meters/second
     private double robotMoveY = 0; //meters/second
 
-    public TestSwerve() {
+  public TestSwerve() {
         /*for (int i = 0; i < totalSwerveModules; i++) {
             swerveModules[i] = new TestSwerveModule((i*2)+2, (i*2) + 1, 0, 0);
             swerveModules[i].resetMoveEncoder(); //set initial position to 0
@@ -31,10 +31,24 @@ public class TestSwerve extends SubsystemBase {
         System.out.println("Swerve Initialized");
         /*double[][] calculation = calculateVRotate(5, 1, 1, 0);
         System.out.println(calculation[1][0] + " " + calculation[1][1]);*/
+        double[][] wheelPositions = {{1, 1}, //front right
+                                    {1, -1}, //front left
+                                    {-1, -1}, //back left
+                                    {-1, 1}}; //back right
+        for (int i = 0; i < totalSwerveModules; i++) {
+            double[] controllerInput = {1, 1};
+            double[][] calculationVStrafe = calculateVStrafe(controllerInput, 1.16);
+            System.out.println(calculationVStrafe[0][0] + " " + calculationVStrafe[0][1]);
+            double[][] calculationVRotate = calculateVRotate(5, wheelPositions[i][0], wheelPositions[i][1], 1.16);
+            System.out.println(calculationVRotate[0][0] + " " + calculationVRotate[0][1]);
+            double[] calculationVSumRobot = calculateVSum(calculationVStrafe[0], calculationVRotate[0]);
+            System.out.println(calculationVSumRobot[0] + " " + calculationVSumRobot[1]);
 
-        double[] controllerInput = {1, 1};
-        double[][] calculation = calculateVStrafe(controllerInput, Math.PI/4);
-        System.out.println(calculation[0][0] + " " + calculation[0][1]);
+            double[] calculateVDriveWheel = {calculateVDriveWheel(calculationVSumRobot[0], calculationVSumRobot[1])};
+            System.out.println("Module" + (i + 1) + " speed = "+ calculateVDriveWheel[0]);
+            double[] calculateVRotateWheel = {caculateVRotateWheel(calculationVSumRobot[0], calculationVSumRobot[1])};
+            System.out.println("Module" + (i + 1) + " angle = "+ calculateVRotateWheel[0]);
+        }
     }
 
     public void setSwerveModule(int swerveModule, double turnSpeed, double moveSpeed) {
@@ -85,6 +99,21 @@ public class TestSwerve extends SubsystemBase {
         return calculation;
     }
 
+    public double[] calculateVSum(double[] velocityVector1, double[] velocityVector2) {
+        double velocityVectorX = velocityVector1[0] + velocityVector2[0];
+        double velocityVectorY = velocityVector1[1] + velocityVector2[1];
+        double velocityVector[] = {velocityVectorX, velocityVectorY};
+        return velocityVector;
+    }
+
+    public double calculateVDriveWheel(double velocityVectorX, double velocityVectorY) {
+        return Math.sqrt((velocityVectorY * velocityVectorY) + (velocityVectorX * velocityVectorX));
+    }
+
+    public double caculateVRotateWheel(double velocityVectorX, double velocityVectorY) {
+        return Math.atan2(-velocityVectorX, velocityVectorY);
+    }
+
     /**
      * strafeX is a left/right vector in meters/second
      * strafeY is a forward/backward vector in meters/second
@@ -119,6 +148,6 @@ public class TestSwerve extends SubsystemBase {
         for (int i = 0; i < totalSwerveModules; i++) {
             SmartDashboard.putNumber("Swerve Module " + i + " Move Encoder", swerveModules[i].getMoveEncoder());
         }
-    }
-} 
+  }
+}
 
