@@ -20,7 +20,7 @@ import frc.robot.subsystems.TestSwerveModule;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private Command turCommand;
+  private Command turnCommand;
 
   private RobotContainer m_robotContainer;
 
@@ -58,6 +58,15 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {}
 
+  REVPhysicsSim sim = new REVPhysicsSim();
+  
+  double Kp = 0.005; // P gain (may be tuned)
+  TestSwerveModule testSwerveModule = new TestSwerveModule(3, 4, 0, 0);
+  Rotation2d currentPosition;
+  Rotation2d desiredPosition;
+  double error;
+  double command;
+
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
@@ -67,32 +76,26 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       //m_autonomousCommand.schedule();
     }
-    
 
-    TestSwerveModule testSwerveModule = new TestSwerveModule(3, 4, 0, 0);
-    
-    REVPhysicsSim sim = new REVPhysicsSim();
     sim.addSparkMax(testSwerveModule.getTurnMotorReference(), 	0.97f, 11000f);
     sim.addSparkMax(testSwerveModule.getMoveMotorReference(), 3.75f, 5567f);
-    double Kp = 0.005; // P gain (may be tuned)
-    Rotation2d currentPosition = Rotation2d.fromDegrees(testSwerveModule.getTurnEncoder()); // Get current encoder angle
-    System.out.println("Current angle in degrees = " + currentPosition.getDegrees());
-    Rotation2d desiredPosition = Rotation2d.fromDegrees(45); // Desired encoder angle
-    double error = desiredPosition.minus(currentPosition).getDegrees();
-    double command = error * Kp; // Error times P = P command
+    System.out.println("Current angle in degrees = " + currentPosition.getDegrees()); 
+    desiredPosition = Rotation2d.fromDegrees(45); // Desired encoder angle
 
-    while (error > 0.5) {
-      error = desiredPosition.minus(currentPosition).getDegrees();
-      command = error * Kp;
-      testSwerveModule.setTurnMotor(command);
-      sim.run();
-    }
+    
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    if (error > 0.5) {
+      currentPosition = Rotation2d.fromDegrees(testSwerveModule.getTurnEncoder()); // Get current encoder angle
+      error = desiredPosition.minus(currentPosition).getDegrees();
+      command = error * Kp;
+      testSwerveModule.setTurnMotor(command);
+    }
+  }
 
   @Override
   public void teleopInit() {

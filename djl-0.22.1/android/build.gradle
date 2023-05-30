@@ -1,0 +1,32 @@
+buildscript {
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.1'
+    }
+}
+
+allprojects {
+    group 'ai.djl.android'
+    boolean isRelease = project.hasProperty("release") || project.hasProperty("staging")
+    version = djl_version + (isRelease ? "" : "-SNAPSHOT")
+
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+
+    apply from: file("${rootProject.projectDir}/../tools/gradle/android-formatter.gradle")
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}
