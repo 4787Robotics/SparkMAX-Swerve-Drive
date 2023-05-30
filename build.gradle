@@ -48,6 +48,7 @@ def includeDesktopSupport = true
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 5.
 dependencies {
+    implementation 'ai.djl:api:0.22.1'
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
 
