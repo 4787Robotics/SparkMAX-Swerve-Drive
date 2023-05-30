@@ -1,0 +1,61 @@
+plugins {
+    id 'application'
+}
+
+dependencies {
+    implementation "commons-cli:commons-cli:${commons_cli_version}"
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
+    implementation project(":basicdataset")
+    implementation project(":model-zoo")
+    implementation project(":extensions:timeseries")
+    implementation project(":extensions:tokenizers")
+    implementation project(":extensions:audio")
+
+    // TODO: remove javacv override once 1.5.9 released, see: https://github.com/bytedeco/javacv/issues/1971#issuecomment-1397917486
+    runtimeOnly("org.bytedeco:javacv:1.5.9") {
+        exclude group: "org.bytedeco", module: "opencv"
+        exclude group: "org.bytedeco", module: "openblas"
+        exclude group: "org.bytedeco", module: "flycapture"
+        exclude group: "org.bytedeco", module: "libdc1394"
+        exclude group: "org.bytedeco", module: "libfreenect"
+        exclude group: "org.bytedeco", module: "libfreenect2"
+        exclude group: "org.bytedeco", module: "librealsense"
+        exclude group: "org.bytedeco", module: "librealsense2"
+        exclude group: "org.bytedeco", module: "videoinput"
+        exclude group: "org.bytedeco", module: "artoolkitplus"
+        exclude group: "org.bytedeco", module: "flandmark"
+        exclude group: "org.bytedeco", module: "leptonica"
+        exclude group: "org.bytedeco", module: "tesseract"
+        exclude group: "org.bytedeco", module: "tesseract"
+    }
+
+    runtimeOnly project(":engines:pytorch:pytorch-model-zoo")
+    runtimeOnly project(":engines:tensorflow:tensorflow-model-zoo")
+    runtimeOnly project(":engines:mxnet:mxnet-model-zoo")
+    runtimeOnly project(":engines:onnxruntime:onnxruntime-engine")
+
+    testImplementation("org.testng:testng:${testng_version}") {
+        exclude group: "junit", module: "junit"
+    }
+}
+
+application {
+    mainClass = System.getProperty("main", "ai.djl.examples.inference.ObjectDetection")
+}
+
+run {
+    environment("TF_CPP_MIN_LOG_LEVEL", "1") // turn off TensorFlow print out
+    systemProperties System.getProperties()
+    systemProperties.remove("user.dir")
+    systemProperty("file.encoding", "UTF-8")
+}
+
+tasks.register('listmodels', JavaExec) {
+    systemProperties System.getProperties()
+    systemProperties.remove("user.dir")
+    systemProperty("file.encoding", "UTF-8")
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = "ai.djl.examples.inference.ListModels"
+}
+tasks.distTar.enabled = false
+tasks.distZip.enabled = false
