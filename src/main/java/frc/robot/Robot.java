@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import com.revrobotics.REVPhysicsSim;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.TestSwerveModule;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -61,7 +65,27 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      //m_autonomousCommand.schedule();
+    }
+    
+
+    TestSwerveModule testSwerveModule = new TestSwerveModule(3, 4, 0, 0);
+    
+    REVPhysicsSim sim = new REVPhysicsSim();
+    sim.addSparkMax(testSwerveModule.getTurnMotorReference(), 	0.97f, 11000f);
+    sim.addSparkMax(testSwerveModule.getMoveMotorReference(), 3.75f, 5567f);
+    double Kp = 0.005; // P gain (may be tuned)
+    Rotation2d currentPosition = Rotation2d.fromDegrees(testSwerveModule.getTurnEncoder()); // Get current encoder angle
+    System.out.println("Current angle in degrees = " + currentPosition.getDegrees());
+    Rotation2d desiredPosition = Rotation2d.fromDegrees(45); // Desired encoder angle
+    double error = desiredPosition.minus(currentPosition).getDegrees();
+    double command = error * Kp; // Error times P = P command
+
+    while (error > 0.5) {
+      error = desiredPosition.minus(currentPosition).getDegrees();
+      command = error * Kp;
+      testSwerveModule.setTurnMotor(command);
+      sim.run();
     }
   }
 

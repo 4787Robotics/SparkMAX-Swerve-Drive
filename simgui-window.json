@@ -7,7 +7,7 @@
       "fps": "120",
       "height": "1050",
       "maximized": "0",
-      "style": "0",
+      "style": "1",
       "userScale": "2",
       "width": "1920",
       "xpos": "11",
@@ -23,7 +23,7 @@
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "375,697",
-      "Size": "796,73"
+      "Size": "796,240"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -34,6 +34,11 @@
       "Collapsed": "0",
       "Pos": "1537,30",
       "Size": "375,1042"
+    },
+    "###RoboRIO": {
+      "Collapsed": "0",
+      "Pos": "505,64",
+      "Size": "119,146"
     },
     "###System Joysticks": {
       "Collapsed": "0",

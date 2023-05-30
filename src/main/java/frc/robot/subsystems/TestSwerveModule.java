@@ -6,10 +6,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.CalibrationTime;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -41,8 +43,8 @@ public class TestSwerveModule extends SubsystemBase {
     turnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     moveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     //sets max current
-    turnMotor.setSmartCurrentLimit(15);
-    moveMotor.setSmartCurrentLimit(25);
+    turnMotor.setSmartCurrentLimit(20); //20 is the absolute max
+    moveMotor.setSmartCurrentLimit(30); //30 is the absolute max
     //limits acceleration
     turnMotor.setOpenLoopRampRate(1);
     moveMotor.setOpenLoopRampRate(1);
@@ -78,6 +80,14 @@ public class TestSwerveModule extends SubsystemBase {
   
   public void setMoveMotor(double speed) {
     moveMotor.set(speed);
+  }
+
+  public CANSparkMax getTurnMotorReference() {
+    return turnMotor;
+  }
+
+  public CANSparkMax getMoveMotorReference() {
+    return moveMotor;
   }
 
   public void resetMoveEncoder() {
