@@ -4,13 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.SwerveCommand;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.TestSwerve;
 import frc.robot.subsystems.TestSwerveModule;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,11 +32,24 @@ public class RobotContainer {
   private final TestSwerveModule testSwerveModule = new TestSwerveModule(1, 2, 0, 0);
   private final TurnToAngle turnToAngle = new TurnToAngle(30, testSwerveModule);
   private final TestSwerve testSwerve = new TestSwerve();
+  XboxController m_driverController = new XboxController(0);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // Configure default commands
+    testSwerve.setDefaultCommand(
+        // The left stick controls translation of the robot.
+        // Turning is controlled by the X axis of the right stick.
+        new RunCommand(
+          () -> testSwerve.inputStrength(
+            -MathUtil.applyDeadband(m_driverController.getLeftY(), 0.05),
+            MathUtil.applyDeadband(m_driverController.getLeftX(), 0.05)
+            ),
+          testSwerve));
   }
 
   /**
@@ -41,7 +58,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

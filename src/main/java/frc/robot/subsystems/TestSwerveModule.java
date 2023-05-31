@@ -113,4 +113,9 @@ public class TestSwerveModule extends SubsystemBase {
   public double getCurrentMoveVelocityInchesPerSecond() {
     return getCurrentMoveVelocityRotationsPerSecond() * MOVE_WHEEL_CIRCUMFERENCE / MOVE_MOTOR_GEAR_RATIO;
   }
+
+  @Override
+  public void periodic() {
+
+  }
 }

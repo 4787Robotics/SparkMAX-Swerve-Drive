@@ -5,13 +5,13 @@
   "MainWindow": {
     "GLOBAL": {
       "fps": "120",
-      "height": "1050",
-      "maximized": "0",
+      "height": "1369",
+      "maximized": "1",
       "style": "1",
       "userScale": "2",
-      "width": "1920",
-      "xpos": "11",
-      "ypos": "45"
+      "width": "2560",
+      "xpos": "0",
+      "ypos": "23"
     }
   },
   "Window": {
@@ -22,8 +22,8 @@
     },
     "###Joysticks": {
       "Collapsed": "0",
-      "Pos": "375,697",
-      "Size": "796,73"
+      "Pos": "834,902",
+      "Size": "796,240"
     },
     "###NetworkTables": {
       "Collapsed": "0",

@@ -47,7 +47,7 @@ public final class Constants {
     public static final double K_TURN_ENCODER_COUNTS_PER_ROTATION = 8192.0;
     public static final double K_TURN_ENCODER_ROTATIONS_PER_PULSE =
         1 / K_TURN_ENCODER_COUNTS_PER_ROTATION;
-    public static final double K_TURN_MAX_RPM = 5600;
+    public static final double K_TURN_MAX_RPM = 5600; //under load
 
     public static final double K_TURN_TOLERANCE = 30;
     public static final double K_TURN_TOLERANCE_PER_SECOND = 10.0;
