@@ -33,7 +33,8 @@ public class TestSwerve extends SubsystemBase {
         for (int i = 0; i < totalSwerveModules; i++) {
             swerveModules[i] = new TestSwerveModule((i*2)+2, (i*2) + 1, 0, 0);
             swerveModules[i].resetMoveEncoder(); //set initial position to 0
-        }
+        } //to test all swerve modules
+
         //swerveModules[0] = new TestSwerveModule(TEST_TURN_MOTOR_ID, TEST_MOVE_MOTOR_ID);
 
         System.out.println("Swerve Initialized");
@@ -145,6 +146,7 @@ public class TestSwerve extends SubsystemBase {
      * @param rotate
      */
     public void drive(double moveX, double moveY, double rotate) {
+        System.out.println("Driving");
         double inputStrength = Math.max(moveX, moveY);
         double[] VDriveWheels = new double[4];
         double[] VRotateWheels = new double[4];
