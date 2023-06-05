@@ -30,10 +30,10 @@ public class TestSwerve extends SubsystemBase {
 
   public TestSwerve() {
         gyro = new AHRS(SPI.Port.kMXP);
-        /*for (int i = 0; i < totalSwerveModules; i++) {
+        for (int i = 0; i < totalSwerveModules; i++) {
             swerveModules[i] = new TestSwerveModule((i*2)+2, (i*2) + 1, 0, 0);
             swerveModules[i].resetMoveEncoder(); //set initial position to 0
-        }*/
+        }
         //swerveModules[0] = new TestSwerveModule(TEST_TURN_MOTOR_ID, TEST_MOVE_MOTOR_ID);
 
         System.out.println("Swerve Initialized");
@@ -155,7 +155,7 @@ public class TestSwerve extends SubsystemBase {
             double currentRobotAngleRadians = convertYawToRadians(gyro.getYaw());
             double[][] calculationVStrafe = calculateVStrafe(controllerInput, currentRobotAngleRadians);
             System.out.println(calculationVStrafe[0][0] + " " + calculationVStrafe[0][1]);
-            double[][] calculationVRotate = calculateVRotate(5, wheelPositions[i][0], wheelPositions[i][1], currentRobotAngleRadians);
+            double[][] calculationVRotate = calculateVRotate(5, WHEEL_POSITIONS[i][0], WHEEL_POSITIONS[i][1], currentRobotAngleRadians);
             System.out.println(calculationVRotate[0][0] + " " + calculationVRotate[0][1]);
             double[] calculationVSumRobot = calculateVSum(calculationVStrafe[0], calculationVRotate[0]);
             System.out.println(calculationVSumRobot[0] + " " + calculationVSumRobot[1]);
