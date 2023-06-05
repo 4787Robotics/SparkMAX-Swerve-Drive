@@ -29,10 +29,10 @@ public final class Constants {
     public static final int MOVE_WHEEL_CIRCUMFERENCE = 1; // UNKNOWN
 
     public static final double[][] WHEEL_POSITIONS = {
-        {0.5, 0.5}, // front right - +x, +y
-        {-0.5, 0.5}, // front left - -x, +y
-        {-0.5, -0.5}, // back left - -x, -y
-        {0.5, -0.5} // back right - +x, -y
+        {1, 1}, // front right - +x, +y
+        {-1, 1}, // front left - -x, +y
+        {-1, -1}, // back left - -x, -y
+        {1, -1} // back right - +x, -y
     };
 
     //Swerve PID constants

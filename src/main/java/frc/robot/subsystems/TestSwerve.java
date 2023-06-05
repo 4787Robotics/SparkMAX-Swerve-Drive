@@ -147,8 +147,11 @@ public class TestSwerve extends SubsystemBase {
      */
     public void drive(double moveX, double moveY, double rotate) {
         System.out.println("Driving");
-        double inputStrength = Math.max(moveX, moveY);
+        System.out.println("moveX: " + moveX + " moveY: " + moveY + " rotate: " + rotate);
+        double driveInputStrength = Math.max(Math.abs(moveX), Math.abs(moveY));
+        double rotateInputStrength = Math.abs(rotate);
         double[] VDriveWheels = new double[4];
+        double[] vAdjustedDriveWheels = new double[4];
         double[] VRotateWheels = new double[4];
         double maxStrength = 0; //which module has the highest velocity
 
@@ -157,25 +160,31 @@ public class TestSwerve extends SubsystemBase {
             double currentRobotAngleRadians = convertYawToRadians(gyro.getYaw());
             double[][] calculationVStrafe = calculateVStrafe(controllerInput, currentRobotAngleRadians);
             System.out.println(calculationVStrafe[0][0] + " " + calculationVStrafe[0][1]);
-            double[][] calculationVRotate = calculateVRotate(5, WHEEL_POSITIONS[i][0], WHEEL_POSITIONS[i][1], currentRobotAngleRadians);
+            double[][] calculationVRotate = calculateVRotate(rotate, WHEEL_POSITIONS[i][0], WHEEL_POSITIONS[i][1], currentRobotAngleRadians);
             System.out.println(calculationVRotate[0][0] + " " + calculationVRotate[0][1]);
-            double[] calculationVSumRobot = calculateVSum(calculationVStrafe[0], calculationVRotate[0]);
+            double[] VStrafe = {calculationVStrafe[0][0], calculationVStrafe[0][1]};
+            double[] VRotate = {calculationVRotate[0][0], calculationVRotate[0][1]};
+            double[] adjustedVStrafe = {calculationVStrafe[0][0] * driveInputStrength, calculationVStrafe[0][1] * driveInputStrength};
+            double[] adjustedVRotate = {calculationVRotate[0][0] * rotateInputStrength, calculationVRotate[0][1] * rotateInputStrength};
+            double[] calculationVSumRobot = calculateVSum(VStrafe, VRotate);
+            double[] adjustedCalculationVSumRobot = calculateVSum(adjustedVStrafe, adjustedVRotate);
             System.out.println(calculationVSumRobot[0] + " " + calculationVSumRobot[1]);
-
             double calculateVDriveWheel = calculateVDriveWheel(calculationVSumRobot[0], calculationVSumRobot[1]);
-            System.out.println("Module" + (i + 1) + " speed = "+ calculateVDriveWheel);
+            double calculateAdjustedVDriveWheel = calculateVDriveWheel(adjustedCalculationVSumRobot[0], adjustedCalculationVSumRobot[1]);
+            //System.out.println("Module" + (i + 1) + " speed = "+ calculateVDriveWheel);
             double calculateVRotateWheel = caculateVRotateWheel(calculationVSumRobot[0], calculationVSumRobot[1]);
             System.out.println("Module" + (i + 1) + " angle = "+ calculateVRotateWheel);
 
+            vAdjustedDriveWheels[i] = calculateAdjustedVDriveWheel;
             VDriveWheels[i] = calculateVDriveWheel;
             VRotateWheels[i] = calculateVRotateWheel;
         }
 
         maxStrength = largest(VDriveWheels);
-        double scaleFactor = inputStrength / maxStrength;
 
         for (int i = 0; i < totalSwerveModules; i++) {
-            swerveModules[i].setMoveMotor(VDriveWheels[i] * scaleFactor);
+            swerveModules[i].setMoveMotor(vAdjustedDriveWheels[i] / maxStrength);
+            System.out.println("Module" + (i + 1) + " adjusted speed = "+ vAdjustedDriveWheels[i] / maxStrength);
         }
     }
 
