@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
   REVPhysicsSim sim = new REVPhysicsSim();
   
   double Kp = 0.005; // P gain (may be tuned)
-  TestSwerveModule testSwerveModule = new TestSwerveModule(3, 4, 0, 0);
+  //TestSwerveModule testSwerveModule = new TestSwerveModule(3, 4, 0, 0);
   Rotation2d currentPosition;
   Rotation2d desiredPosition;
   double error;
@@ -70,15 +70,15 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       //m_autonomousCommand.schedule();
     }
 
-    sim.addSparkMax(testSwerveModule.getTurnMotorReference(), 	0.97f, 11000f);
-    sim.addSparkMax(testSwerveModule.getMoveMotorReference(), 3.75f, 5567f);
+    //sim.addSparkMax(testSwerveModule.getTurnMotorReference(), 	0.97f, 11000f);
+    //sim.addSparkMax(testSwerveModule.getMoveMotorReference(), 3.75f, 5567f);
     System.out.println("Current angle in degrees = " + currentPosition.getDegrees()); 
     desiredPosition = Rotation2d.fromDegrees(45); // Desired encoder angle
 
@@ -89,12 +89,12 @@ public class Robot extends TimedRobot {
   @Override
   
   public void autonomousPeriodic() {
-    if (error > 0.5) {
+    /*if (error > 0.5) {
       currentPosition = Rotation2d.fromDegrees(testSwerveModule.getTurnEncoder()); // Get current encoder angle
       error = desiredPosition.minus(currentPosition).getDegrees();
       command = error * Kp;
       testSwerveModule.setTurnMotor(command);
-    }
+    }*/
   }
 
   @Override

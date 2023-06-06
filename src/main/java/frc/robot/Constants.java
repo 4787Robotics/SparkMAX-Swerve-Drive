@@ -28,6 +28,13 @@ public final class Constants {
 
     public static final int MOVE_WHEEL_CIRCUMFERENCE = 1; // UNKNOWN
 
+    public static final double[][] WHEEL_POSITIONS = {
+        {1, 1}, // front right - +x, +y
+        {-1, 1}, // front left - -x, +y
+        {-1, -1}, // back left - -x, -y
+        {1, -1} // back right - +x, -y
+    };
+
     //Swerve PID constants
     public static final double TURN_P = 0.02;
     public static final double TURN_I = 0.001;
@@ -47,7 +54,7 @@ public final class Constants {
     public static final double K_TURN_ENCODER_COUNTS_PER_ROTATION = 8192.0;
     public static final double K_TURN_ENCODER_ROTATIONS_PER_PULSE =
         1 / K_TURN_ENCODER_COUNTS_PER_ROTATION;
-    public static final double K_TURN_MAX_RPM = 5600;
+    public static final double K_TURN_MAX_RPM = 5600; //under load
 
     public static final double K_TURN_TOLERANCE = 30;
     public static final double K_TURN_TOLERANCE_PER_SECOND = 10.0;
