@@ -41,11 +41,41 @@
     }
   },
   "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
     "transitory": {
       "FMSInfo": {
+        "open": true
+      },
+      "LiveWindow": {
+        ".status": {
+          "open": true
+        },
+        "open": true
+      },
+      "Shuffleboard": {
+        ".recording": {
+          "open": true
+        },
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      }
+    },
+    "shuffleboard@1": {
+      "Publishers": {
         "open": true
       }
     }

@@ -36,11 +36,11 @@ public final class Constants {
     };
 
     //Swerve PID constants
-    public static final double TURN_P = 0.02;
-    public static final double TURN_I = 0.001;
-    public static final double TURN_D = 0.0;
+    public static final double TURN_P = 1;
+    public static final double TURN_I = 0;
+    public static final double TURN_D = 0;
     public static final double TURN_IZ = 0;
-    public static final double TURN_FF = 0.00156;
+    public static final double TURN_FF = 0;
 
     public static final double TURN_MAX_OUTPUT = 1.0;
     public static final double TURN_MIN_OUTPUT = -1.0;

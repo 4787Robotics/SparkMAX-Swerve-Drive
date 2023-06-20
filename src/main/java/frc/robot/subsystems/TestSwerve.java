@@ -31,7 +31,7 @@ public class TestSwerve extends SubsystemBase {
   public TestSwerve() {
         gyro = new AHRS(SPI.Port.kMXP);
         for (int i = 0; i < totalSwerveModules; i++) {
-            swerveModules[i] = new TestSwerveModule((i*2)+2, (i*2) + 1, 0, 0);
+            swerveModules[i] = new TestSwerveModule(i+1, (i*2) + 1, (i*2)+2, 0, 0);
             swerveModules[i].resetMoveEncoder(); //set initial position to 0
         } //to test all swerve modules
 
@@ -146,8 +146,8 @@ public class TestSwerve extends SubsystemBase {
      * @param rotate
      */
     public void drive(double moveX, double moveY, double rotate) {
-        System.out.println("Driving");
-        System.out.println("moveX: " + moveX + " moveY: " + moveY + " rotate: " + rotate);
+        //System.out.println("Driving");
+        //System.out.println("moveX: " + moveX + " moveY: " + moveY + " rotate: " + rotate);
         double driveInputStrength = Math.max(Math.abs(moveX), Math.abs(moveY));
         double rotateInputStrength = Math.abs(rotate);
         double[] VDriveWheels = new double[4];
@@ -173,7 +173,7 @@ public class TestSwerve extends SubsystemBase {
             double calculateAdjustedVDriveWheel = calculateVDriveWheel(adjustedCalculationVSumRobot[0], adjustedCalculationVSumRobot[1]);
             //System.out.println("Module" + (i + 1) + " speed = "+ calculateVDriveWheel);
             double calculateVRotateWheel = caculateVRotateWheel(calculationVSumRobot[0], calculationVSumRobot[1]);
-            System.out.println("Module" + (i + 1) + " angle = "+ calculateVRotateWheel);
+            //System.out.println("Module" + (i + 1) + " angle = "+ calculateVRotateWheel);
 
             vAdjustedDriveWheels[i] = calculateAdjustedVDriveWheel;
             VDriveWheels[i] = calculateVDriveWheel;
@@ -184,7 +184,10 @@ public class TestSwerve extends SubsystemBase {
 
         for (int i = 0; i < totalSwerveModules; i++) {
             swerveModules[i].setMoveMotor(vAdjustedDriveWheels[i] / maxStrength);
+            swerveModules[i].setSetPoint(-((VRotateWheels[i]) /Math.PI));
             System.out.println("Module" + (i + 1) + " adjusted speed = "+ vAdjustedDriveWheels[i] / maxStrength);
+            System.out.println("Module" + (i + 1) + " setpoint = "+ -(VRotateWheels[i]));
+            System.out.println("Module" + (i + 1) + " adjusted setpoint = "+ -((VRotateWheels[i]) /Math.PI));
         }
     }
 

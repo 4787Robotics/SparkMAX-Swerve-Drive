@@ -7,32 +7,37 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.CalibrationTime;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
-
 public class TestSwerveModule extends SubsystemBase {
   private CANSparkMax turnMotor, moveMotor;
   private SparkMaxPIDController turnPIDController;
-  private double setPoint, provessVariable;
+  private double setPoint, currentAngle, provessVariable;
 
   private SparkMaxAbsoluteEncoder turnEncoder;
 
   private double currentModuleVelocity; //meters per second
   private double currentModuleAngle; //in radians
 
-  private double WHEEL_X;
-  private double WHEEL_Y;
+  private double WHEEL_X, WHEEL_Y;
+  private double MODULE_NUMBER, TURN_MOTOR_ID, MOVE_MOTOR_ID;
   /** Creates a new ExampleSubsystem. */
-  public TestSwerveModule(int TURN_MOTOR_ID, int MOVE_MOTOR_ID, double WHEEL_X, double WHEEL_Y) {
+  public TestSwerveModule(int MODULE_NUMBER, int TURN_MOTOR_ID, int MOVE_MOTOR_ID, double WHEEL_X, double WHEEL_Y) {
     this.WHEEL_X = WHEEL_X;
     this.WHEEL_Y = WHEEL_Y;
+
+    this.MODULE_NUMBER = MODULE_NUMBER;
+    this.TURN_MOTOR_ID = TURN_MOTOR_ID;
+    this.MOVE_MOTOR_ID = MOVE_MOTOR_ID;
 
     turnMotor = new CANSparkMax(TURN_MOTOR_ID, MotorType.kBrushless);
     moveMotor = new CANSparkMax(MOVE_MOTOR_ID, MotorType.kBrushless);
@@ -52,6 +57,10 @@ public class TestSwerveModule extends SubsystemBase {
     turnEncoder = turnMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
 
     turnPIDController = turnMotor.getPIDController();
+    turnPIDController.setFeedbackDevice(turnEncoder);
+
+    setPoint = 0;
+    currentAngle = setPoint * 180;
 
     turnPIDController.setP(TURN_P);
     turnPIDController.setI(TURN_I);
@@ -59,6 +68,9 @@ public class TestSwerveModule extends SubsystemBase {
     turnPIDController.setIZone(TURN_IZ);
     turnPIDController.setFF(TURN_FF);
     turnPIDController.setOutputRange(TURN_MIN_OUTPUT, TURN_MAX_OUTPUT);
+    turnPIDController.setPositionPIDWrappingMinInput(TURN_MIN_OUTPUT);
+    turnPIDController.setPositionPIDWrappingMaxInput(TURN_MAX_OUTPUT);
+    turnPIDController.setPositionPIDWrappingEnabled(true);
   } 
 
   public double getWheelX() {
@@ -114,8 +126,30 @@ public class TestSwerveModule extends SubsystemBase {
     return getCurrentMoveVelocityRotationsPerSecond() * MOVE_WHEEL_CIRCUMFERENCE / MOVE_MOTOR_GEAR_RATIO;
   }
 
+  public void updateShuffleBoard() {
+    //SmartDashboard.putNumber("Turn Motor Velocity", turnMotor.getEncoder().getVelocity());
+    //SmartDashboard.putNumber("Turn Motor Position", turnMotor.getEncoder().getPosition());
+    //SmartDashboard.putNumber("Turn Motor Current", turnMotor.getOutputCurrent());
+    //SmartDashboard.putNumber("Turn Motor Voltage", turnMotor.getBusVoltage());
+    //SmartDashboard.putNumber("Turn Motor Temperature", turnMotor.getMotorTemperature());
+    SmartDashboard.putNumber("Turn Motor " + this.MODULE_NUMBER + " Angle", currentAngle);
+    SmartDashboard.putNumber("Turn Motor " + this.MODULE_NUMBER + " Setpoint", setPoint);
+  }
+
+  public void updatePIDValues() {
+    if (SmartDashboard.getNumber("Turn Motor " + this.MODULE_NUMBER, 0) != setPoint) {
+      setPoint = SmartDashboard.getNumber("Turn Motor " + this.MODULE_NUMBER, 0);
+    }
+  }
+
+  public void setSetPoint(double newSetPoint) {
+    this.setPoint = newSetPoint;
+  }
+
   @Override
   public void periodic() {
-
+    turnPIDController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+    currentAngle = setPoint * 180;
+    System.out.println("SetPoint " + this.MODULE_NUMBER + " " + setPoint);
   }
 }
