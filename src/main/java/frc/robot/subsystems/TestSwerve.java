@@ -18,24 +18,25 @@ import edu.wpi.first.wpilibj.SPI;
 public class TestSwerve extends SubsystemBase {
     private AHRS gyro;
 
-    final int totalSwerveModules = 4;
+    final int totalSwerveModules = 1;
     private TestSwerveModule[] swerveModules = new TestSwerveModule[totalSwerveModules];
 
-    private boolean fieldCentric = false;
+    private boolean fieldCentric = true;
 
-    private double robotAngle = 0; //0 radians is up
+    private double robotAngle = 0; //0 radians is upp
     private double robotAngularVelocity = 0; //radians/second
     private double robotMoveX = 0; //meters/second
     private double robotMoveY = 0; //meters/second
 
   public TestSwerve() {
         gyro = new AHRS(SPI.Port.kMXP);
-        for (int i = 0; i < totalSwerveModules; i++) {
-            swerveModules[i] = new TestSwerveModule(i+1, (i*2) + 1, (i*2)+2, 0, 0);
+        gyro.reset();
+        /*for (int i = 0; i < totalSwerveModules; i++) {
+            swerveModules[i] = new TestSwerveModule(i+1, TURN_MOTOR_IDS[i], MOVE_MOTOR_IDS[i], WHEEL_POSITIONS[i][0], WHEEL_POSITIONS[i][1]);
             swerveModules[i].resetMoveEncoder(); //set initial position to 0
-        } //to test all swerve modules
+        }*/ //to test all swerve modules
 
-        //swerveModules[0] = new TestSwerveModule(TEST_TURN_MOTOR_ID, TEST_MOVE_MOTOR_ID);
+        swerveModules[0] = new TestSwerveModule(1, TEST_TURN_MOTOR_ID, TEST_MOVE_MOTOR_ID, 0, 0);
 
         System.out.println("Swerve Initialized");
         /*double[][] calculation = calculateVRotate(5, 1, 1, 0);
@@ -159,16 +160,16 @@ public class TestSwerve extends SubsystemBase {
             double[] controllerInput = {moveX, moveY};
             double currentRobotAngleRadians = convertYawToRadians(gyro.getYaw());
             double[][] calculationVStrafe = calculateVStrafe(controllerInput, currentRobotAngleRadians);
-            System.out.println(calculationVStrafe[0][0] + " " + calculationVStrafe[0][1]);
+            //System.out.println(calculationVStrafe[0][0] + " " + calculationVStrafe[0][1]);
             double[][] calculationVRotate = calculateVRotate(rotate, WHEEL_POSITIONS[i][0], WHEEL_POSITIONS[i][1], currentRobotAngleRadians);
-            System.out.println(calculationVRotate[0][0] + " " + calculationVRotate[0][1]);
+            //System.out.println(calculationVRotate[0][0] + " " + calculationVRotate[0][1]);
             double[] VStrafe = {calculationVStrafe[0][0], calculationVStrafe[0][1]};
             double[] VRotate = {calculationVRotate[0][0], calculationVRotate[0][1]};
             double[] adjustedVStrafe = {calculationVStrafe[0][0] * driveInputStrength, calculationVStrafe[0][1] * driveInputStrength};
             double[] adjustedVRotate = {calculationVRotate[0][0] * rotateInputStrength, calculationVRotate[0][1] * rotateInputStrength};
             double[] calculationVSumRobot = calculateVSum(VStrafe, VRotate);
             double[] adjustedCalculationVSumRobot = calculateVSum(adjustedVStrafe, adjustedVRotate);
-            System.out.println(calculationVSumRobot[0] + " " + calculationVSumRobot[1]);
+            //System.out.println(calculationVSumRobot[0] + " " + calculationVSumRobot[1]);
             double calculateVDriveWheel = calculateVDriveWheel(calculationVSumRobot[0], calculationVSumRobot[1]);
             double calculateAdjustedVDriveWheel = calculateVDriveWheel(adjustedCalculationVSumRobot[0], adjustedCalculationVSumRobot[1]);
             //System.out.println("Module" + (i + 1) + " speed = "+ calculateVDriveWheel);
@@ -183,11 +184,25 @@ public class TestSwerve extends SubsystemBase {
         maxStrength = largest(VDriveWheels);
 
         for (int i = 0; i < totalSwerveModules; i++) {
-            swerveModules[i].setMoveMotor(vAdjustedDriveWheels[i] / maxStrength);
-            swerveModules[i].setSetPoint(-((VRotateWheels[i]) /Math.PI));
-            System.out.println("Module" + (i + 1) + " adjusted speed = "+ vAdjustedDriveWheels[i] / maxStrength);
-            System.out.println("Module" + (i + 1) + " setpoint = "+ -(VRotateWheels[i]));
-            System.out.println("Module" + (i + 1) + " adjusted setpoint = "+ -((VRotateWheels[i]) /Math.PI));
+            //System.out.println(vAdjustedDriveWheels[i] / maxStrength);
+            if (maxStrength != 0) {
+                swerveModules[i].setMoveMotor(vAdjustedDriveWheels[i] / maxStrength);
+                //System.out.println("Module" + (i + 1) + " adjusted speed = "+ vAdjustedDriveWheels[i] / maxStrength);
+            } else {
+                swerveModules[i].setMoveMotor(0);
+                //System.out.println("Module" + (i + 1) + " adjusted speed = "+ 0);
+            }
+
+            double adjustedVRotateWheels = 0;
+            if (-((VRotateWheels[i]) / Math.PI) >= 0) {
+                adjustedVRotateWheels =  1 - ((((VRotateWheels[i]) /Math.PI)) / -2);
+            } else {
+                adjustedVRotateWheels = ((VRotateWheels[i]) /Math.PI) / 2;
+            }
+            swerveModules[i].setSetPoint(adjustedVRotateWheels);
+            System.out.println("Module" + (i + 1) + " setpoint = "+ adjustedVRotateWheels);
+            //System.out.println("Module" + (i + 1) + " setpoint = "+ -(VRotateWheels[i]));
+            //System.out.println("Module" + (i + 1) + " adjusted setpoint = "+ -((VRotateWheels[i]) /Math.PI));
         }
     }
 

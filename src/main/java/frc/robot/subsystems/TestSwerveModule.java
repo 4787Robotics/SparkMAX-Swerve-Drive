@@ -21,7 +21,7 @@ import com.revrobotics.SparkMaxPIDController;
 public class TestSwerveModule extends SubsystemBase {
   private CANSparkMax turnMotor, moveMotor;
   private SparkMaxPIDController turnPIDController;
-  private double setPoint, currentAngle, provessVariable;
+  private double setPoint, currentAngle, processVariable;
 
   private SparkMaxAbsoluteEncoder turnEncoder;
 
@@ -51,7 +51,7 @@ public class TestSwerveModule extends SubsystemBase {
     turnMotor.setSmartCurrentLimit(20); //20 is the absolute max
     moveMotor.setSmartCurrentLimit(30); //30 is the absolute max
     //limits acceleration
-    turnMotor.setOpenLoopRampRate(1);
+    turnMotor.setOpenLoopRampRate(0.4);
     moveMotor.setOpenLoopRampRate(1);
 
     turnEncoder = turnMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
@@ -83,7 +83,7 @@ public class TestSwerveModule extends SubsystemBase {
 
   public void setTurnPID(double setPoint) {
     turnPIDController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-    provessVariable = turnEncoder.getVelocity();
+    processVariable = turnEncoder.getVelocity();
   }
 
   public void setTurnMotor(double speed) {
@@ -143,13 +143,15 @@ public class TestSwerveModule extends SubsystemBase {
   }
 
   public void setSetPoint(double newSetPoint) {
+    //System.out.println("setpoint: " + newSetPoint);
     this.setPoint = newSetPoint;
   }
 
   @Override
   public void periodic() {
-    turnPIDController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+    turnPIDController.setReference(0.5, CANSparkMax.ControlType.kPosition);
     currentAngle = setPoint * 180;
-    System.out.println("SetPoint " + this.MODULE_NUMBER + " " + setPoint);
+    //System.out.println("MODULE POWER: " + this.turnMotor.getOutputCurrent());
+    //System.out.println("Module: " + MODULE_NUMBER);
   }
 }

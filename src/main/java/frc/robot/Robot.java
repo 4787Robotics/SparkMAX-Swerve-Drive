@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
 
     //sim.addSparkMax(testSwerveModule.getTurnMotorReference(), 	0.97f, 11000f);
     //sim.addSparkMax(testSwerveModule.getMoveMotorReference(), 3.75f, 5567f);
-    System.out.println("Current angle in degrees = " + currentPosition.getDegrees()); 
+    //System.out.println("Current angle in degrees = " + currentPosition.getDegrees()); 
     desiredPosition = Rotation2d.fromDegrees(45); // Desired encoder angle
 
     
