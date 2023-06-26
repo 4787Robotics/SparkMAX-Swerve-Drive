@@ -186,10 +186,10 @@ public class TestSwerve extends SubsystemBase {
         for (int i = 0; i < totalSwerveModules; i++) {
             //System.out.println(vAdjustedDriveWheels[i] / maxStrength);
             if (maxStrength != 0) {
-                swerveModules[i].setMoveMotor(vAdjustedDriveWheels[i] / maxStrength);
+                //swerveModules[i].setMoveMotor(vAdjustedDriveWheels[i] / maxStrength);
                 //System.out.println("Module" + (i + 1) + " adjusted speed = "+ vAdjustedDriveWheels[i] / maxStrength);
             } else {
-                swerveModules[i].setMoveMotor(0);
+                //swerveModules[i].setMoveMotor(0);
                 //System.out.println("Module" + (i + 1) + " adjusted speed = "+ 0);
             }
 
@@ -199,8 +199,7 @@ public class TestSwerve extends SubsystemBase {
             } else {
                 adjustedVRotateWheels = ((VRotateWheels[i]) /Math.PI) / 2;
             }
-            swerveModules[i].setSetPoint(adjustedVRotateWheels);
-            System.out.println("Module" + (i + 1) + " setpoint = "+ adjustedVRotateWheels);
+            swerveModules[i].turnToPoint(adjustedVRotateWheels);
             //System.out.println("Module" + (i + 1) + " setpoint = "+ -(VRotateWheels[i]));
             //System.out.println("Module" + (i + 1) + " adjusted setpoint = "+ -((VRotateWheels[i]) /Math.PI));
         }

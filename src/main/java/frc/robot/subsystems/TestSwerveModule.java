@@ -51,7 +51,7 @@ public class TestSwerveModule extends SubsystemBase {
     turnMotor.setSmartCurrentLimit(20); //20 is the absolute max
     moveMotor.setSmartCurrentLimit(30); //30 is the absolute max
     //limits acceleration
-    turnMotor.setOpenLoopRampRate(0.4);
+    turnMotor.setOpenLoopRampRate(1);
     moveMotor.setOpenLoopRampRate(1);
 
     turnEncoder = turnMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
@@ -59,8 +59,12 @@ public class TestSwerveModule extends SubsystemBase {
     turnPIDController = turnMotor.getPIDController();
     turnPIDController.setFeedbackDevice(turnEncoder);
 
+    turnEncoder.setPositionConversionFactor(1);
+    turnEncoder.setVelocityConversionFactor(1/60);
+
+
     setPoint = 0;
-    currentAngle = setPoint * 180;
+    currentAngle = setPoint * 360;
 
     turnPIDController.setP(TURN_P);
     turnPIDController.setI(TURN_I);
@@ -142,16 +146,52 @@ public class TestSwerveModule extends SubsystemBase {
     }
   }
 
-  public void setSetPoint(double newSetPoint) {
+  public void turnToPoint(double newSetPoint) {
     //System.out.println("setpoint: " + newSetPoint);
     this.setPoint = newSetPoint;
+    double currentPoint = getTurnEncoder();
+
+    /*if ((newSetPoint - currentPoint) >= 0.5) {
+      if (-1 /(2 * (1 / (newSetPoint - currentPoint))) > -0.5) {
+        setTurnMotor(-1 /(2 * (1 / (newSetPoint - currentPoint))));
+      }
+    } else {
+      if (1 /(2 * (1 / (newSetPoint - currentPoint))) < 0.5) {
+        setTurnMotor(1 /(2 * (1 / (newSetPoint - currentPoint))));
+      }
+    }*/
+
+    if (Math.max(newSetPoint, currentPoint) == currentPoint) {
+      if ((currentPoint - newSetPoint) >= 0.5) {
+          setTurnMotor(-1 /(4 * (1 / (currentPoint - newSetPoint))));
+          //setTurnMotor(-0.1);
+      } else {
+          setTurnMotor(1 /(4 * (1 / (currentPoint - newSetPoint))));
+          //setTurnMotor(0.1);
+      }
+    } else {
+      if ((newSetPoint - currentPoint) >= 0.5) {
+          setTurnMotor(-1 /(4 * (1 / (newSetPoint - currentPoint))));
+          //setTurnMotor(-0.1);
+      } else {
+          setTurnMotor(1 /(4 * (1 / (newSetPoint - currentPoint))));
+          //setTurnMotor(0.1);
+      }
+    }
   }
 
   @Override
   public void periodic() {
-    turnPIDController.setReference(0.5, CANSparkMax.ControlType.kPosition);
-    currentAngle = setPoint * 180;
+    //turnToPoint(0.5);
+    //setMoveMotor(0.5);
+    //setTurnMotor(0.1);
+    //setPoint = 0.5; //set target is 0.75
+    //turnPIDController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+    //setTurnMotor(0.5); //positive clockwise //0.5 max
+    currentAngle = setPoint * 360;
+    System.out.println("Module" + " setpoint = " + setPoint);
     //System.out.println("MODULE POWER: " + this.turnMotor.getOutputCurrent());
     //System.out.println("Module: " + MODULE_NUMBER);
+    //System.out.println("PID output: " + turnEncoder.getVelocity());
   }
 }

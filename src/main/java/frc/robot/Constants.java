@@ -20,8 +20,8 @@ public final class Constants {
     public static final double TEST_TURN_SPEED = 0.5;
     public static final double TEST_MOVE_SPEED = 0.5;
 
-    public static final int TEST_TURN_MOTOR_ID = 3;
-    public static final int TEST_MOVE_MOTOR_ID = 4;
+    public static final int TEST_TURN_MOTOR_ID = 1;
+    public static final int TEST_MOVE_MOTOR_ID = 2;
 
     public static final int[] TURN_MOTOR_IDS = {
         5, // front right
@@ -65,14 +65,14 @@ public final class Constants {
     };
 
     //Swerve PID constants
-    public static final double TURN_P = 0.1; //0.0020645
-    public static final double TURN_I = 1e-4;
-    public static final double TURN_D = 1;
+    public static final double TURN_P = 0.09; //0.0020645
+    public static final double TURN_I = 0;
+    public static final double TURN_D = 0;
     public static final double TURN_IZ = 0;
-    public static final double TURN_FF = 0;
+    public static final double TURN_FF = 0.15;
 
     public static final double TURN_MAX_OUTPUT = 1.0;
-    public static final double TURN_MIN_OUTPUT = 0;
+    public static final double TURN_MIN_OUTPUT = 0.0;
 
     public static final double TURN_MAX_VELVELOCITY = 2000;
     public static final double TURN_MAX_XACCELERATION= 1500;
